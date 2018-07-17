@@ -1,0 +1,32 @@
+# depslib dependency file v1.0
+1270948246 source:c:\dingoo_sdk\tools\elf2app\src\elf.c
+	"elf.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+
+1271240094 c:\dingoo_sdk\tools\elf2app\src\elf.h
+	<stdbool.h>
+	<stdint.h>
+
+1271162248 source:c:\dingoo_sdk\tools\elf2app\src\elf2app.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	<stdint.h>
+	<ctype.h>
+	"app.h"
+	"elf.h"
+
+1271162267 c:\dingoo_sdk\tools\elf2app\src\app.h
+	<stdbool.h>
+	<stdint.h>
+
+1271162345 source:c:\dingoo_sdk\tools\elf2app\src\app.c
+	"app.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
