@@ -97,7 +97,7 @@ int main(int argc, char** argv)
     return -1;
   }
   fseek(file, 0, SEEK_END);
-  uintptr_t len = ftell(file);
+  uint32_t len = ftell(file);
 	printf("app length: %d\n", len);
   fseek(file, 0, SEEK_SET);
   uint8_t* body = (uint8_t*)malloc(len);
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
 
 	int fd = open("raw.bin", O_CREAT | O_WRONLY, S_IRUSR);
 	if(fd < 0){
-		printf("failed to create out.elf file\n");
+		printf("failed to create binary file\n");
 		goto err;
 	}
 	write(fd, body+off, size);
