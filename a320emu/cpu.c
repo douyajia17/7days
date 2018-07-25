@@ -1,15 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cpu.h"
+#include "mem.h"
+#include "load.h"
 #include "disasm.h"
 
-void run_app(cpu* p, int prompt, int print_regs)
+extern app_info_t app_info;
+
+void run_app(cpu_t* p, int prompt, int print_regs)
 {
 	int tmp;
-	inst inst;
+	inst_t inst;
 
 	inst.bits = load_mem(p->pc, SIZE_WORD);
-	if(prompt){
+	if(prompt > 0){
 		if(prompt == 1){
 			printf("simulator paused, enter to continue...");
 			while(getchar() != '\n');
@@ -90,7 +94,7 @@ void run_app(cpu* p, int prompt, int print_regs)
 			p->pc += 4;
 			break;
 		default: // undefined funct
-			fprintf(stderr, "%s: pc=%08x, illegal instruction=%08x\n", __FUNCTION__, p->pc, inst.bits);
+			fprintf(stderr, "%s: pc=%08x, illegal instruction=%08x\n", __func__, p->pc, inst.bits);
 			exit(-1);
 			break;
 		}
@@ -167,7 +171,7 @@ void run_app(cpu* p, int prompt, int print_regs)
     p->pc = ((p->pc+4) & 0xf0000000) | (inst.jtype.addr << 2);
     break;
   default: // undefined opcode
-    fprintf(stderr, "%s: pc=%08x, illegal instruction: %08x\n", __FUNCTION__, p->pc, inst.bits);
+    fprintf(stderr, "%s: pc=%08x, illegal instruction: %08x\n", __func__, p->pc, inst.bits);
     exit(-1);
     break;
 	}
@@ -178,14 +182,14 @@ void run_app(cpu* p, int prompt, int print_regs)
   }
 }
 
-void mult(reg rs, reg rt, reg *lo, reg *hi)
+void mult(reg_t rs, reg_t rt, reg_t *lo, reg_t *hi)
 {
 	uint64_t product = ((uint64_t)rs) * rt;
 	*lo = product;
 	*hi = product >> 32;
 }
 
-void init_cpu(cpu* p)
+void init_cpu(cpu_t* p)
 {
 	int i;
 
@@ -202,7 +206,7 @@ void init_cpu(cpu* p)
 	p->RLO = 0;
 }
 
-void print_string(cpu* p)
+void print_string(cpu_t* p)
 {
 	int i, j;
 
@@ -214,9 +218,9 @@ void print_string(cpu* p)
 	}
 }
 
-void sys_call(cpu* p)
+void sys_call(cpu_t* p)
 {
-	reg i;
+	reg_t i;
 
 	switch(p->R[2]){ // syscall number is given by $v0 ($2)
 	case 34:
@@ -226,7 +230,7 @@ void sys_call(cpu* p)
 		printf("%d", p->R[4]);
 		break;
 	case 4: // print a string
-		for(i=p->R[4]; i<MEM_SIZE && load_mem(i, SIZE_BYTE); i++){
+		for(i=p->R[4]; i<app_info.raw_size && load_mem(i, SIZE_BYTE); i++){
 			printf("%c", load_mem(i, SIZE_BYTE));
     }
 		break;
@@ -238,7 +242,7 @@ void sys_call(cpu* p)
 		printf("%c", p->R[4]);
 		break;
 	default: // undefined syscall
-		printf("%s: illegal syscall number %d\n", __FUNCTION__, p->R[2]);
+		printf("%s: illegal syscall number %d\n", __func__, p->R[2]);
 		exit(-1);
 		break;
 	}

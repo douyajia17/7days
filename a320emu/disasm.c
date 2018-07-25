@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "cpu.h"
 #include "disasm.h"
 
-void disasm(inst inst)
+void disasm(inst_t inst)
 {
 	switch(inst.rtype.opcode){
 	case 0x0:

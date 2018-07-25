@@ -11,7 +11,7 @@ extern uint8_t *mem;
 
 int main(int argc, char** argv)
 {
-  cpu p;
+  cpu_t p;
   int c, opt_disasm=0, opt_regdump=0, opt_interactive=0;
 
   while((c = getopt(argc, argv, "drit")) != -1){
@@ -43,10 +43,13 @@ int main(int argc, char** argv)
   if(opt_disasm){
     return 0;
   }
+  printf("AppMain: %08x\n", mem);
 
-  init_cpu(&p);
   while(1){
+    init_cpu(&p);
     run_app(&p, opt_interactive, opt_regdump);
   }
+  free_app();
+  printf("task done !\n");
   return 0;
 }
