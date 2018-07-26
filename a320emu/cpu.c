@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cpu.h"
 #include "mem.h"
 #include "load.h"
@@ -18,7 +19,7 @@ void run_app(cpu_t* p, int prompt, int print_regs)
 			printf("simulator paused, enter to continue...");
 			while(getchar() != '\n');
 		}
-		printf("%08x: ",p->pc);
+		printf("%08x(0x%08x): ", p->pc, inst);
 		disasm(inst);
 	}
 
@@ -191,17 +192,9 @@ void mult(reg_t rs, reg_t rt, reg_t *lo, reg_t *hi)
 
 void init_cpu(cpu_t* p)
 {
-	int i;
-
-	// initialize pc to 0x1000
-	p->pc = 0x1000;
-
-	// zero out all registers
-	for(i=0; i<32; i++){
-		p->R[i] = 0;
-	}
-
-	// zero out special registers RLO and RHI
+	p->pc = 0;
+  memset(p->R, 0, sizeof(p->R));
+  p->R[SP] = STACK_SIZE - 1;
 	p->RHI = 0;
 	p->RLO = 0;
 }

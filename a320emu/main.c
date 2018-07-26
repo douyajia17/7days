@@ -43,10 +43,9 @@ int main(int argc, char** argv)
   if(opt_disasm){
     return 0;
   }
-  printf("AppMain: %08x\n", mem);
 
+  init_cpu(&p);
   while(1){
-    init_cpu(&p);
     run_app(&p, opt_interactive, opt_regdump);
   }
   free_app();
