@@ -836,8 +836,8 @@ pass:
 
   if (fout != NULL)
     qfclose(fout);
-  if (fname != NULL)
-    qfree(fname);
+  //if (fname != NULL)
+    //qfree(fname);
 
   hide_wait_box();
   msg("%d lines saved.\n", fout_line);
